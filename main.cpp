@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "Inventory.hpp"
 
 class Helmet : public InventoryItem {
@@ -17,7 +18,6 @@ public:
 };
 
 int main() {
-    Helmet helmet("nefr_europapa", "negr_afrika(mbappe)");
-    helmet.describe(std::cout);
-    std::cout << '\n';
+    std::unique_ptr<InventoryItem> p = std::make_unique<Helmet>("nefr_europapa", "negr_afrika(mbappe)");
+    std::cout << *p << '\n';
 }

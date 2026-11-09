@@ -11,3 +11,14 @@ public:
 
     virtual void describe(std::ostream &os) const = 0;
 };
+
+class EnergyConsumer {
+public:
+    virtual ~EnergyConsumer() = default;
+
+    virtual double dailyEnergy() const = 0;
+};
+
+std::ostream &operator<<(std::ostream &os, const InventoryItem &item);
+
+bool operator<(const InventoryItem &a, const InventoryItem &b);

@@ -1,9 +1,16 @@
 #include <iostream>
+#include <iomanip>
 #include <memory>
 #include <vector>
 #include "Transport.hpp"
 #include "Inventory.hpp"
 #include "Things.hpp"
+#include "ServiceCenter.hpp"
+template <typename F>
+void attempt(F f) {
+    try { f(); }
+    catch (const FleetError& e) { std::cout << "error: " << e.what() << '\n'; }
+}
 
 
 int main() {
@@ -30,4 +37,15 @@ int main() {
         if (const EnergyConsumer* c = p->checker_energy()) total += c->dailyEnergy();
     }
     std::cout << total << '\n';
+    std::cout << "-----------------------------------" << '\n';
+    ServiceCenter sc;
+    attempt([&] { sc.addTransport(std::make_unique<Scooter>("Mancity", "blue", 2.5, 8)); });
+    attempt([&] { sc.addTransport(std::make_unique<Bike>("MU", "City", 4)); });
+    attempt([&] { sc.addTransport(std::make_unique<Scooter>("Chelsea", "BrokenX", 1.0, 9)); });
+    attempt([&] { sc.addThing(std::make_unique<Helmet>("barca-fu", "nePro")); });
+    attempt([&] { sc.addThing(std::make_unique<Dock_station>("tarkov", "Hub", 10.0)); });
+
+    //sc.printAll(std::cout);
+    sc.printNovice(std::cout);
+    std::cout << sc.totalEnergy() << '\n';
 }

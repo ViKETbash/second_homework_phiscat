@@ -1,6 +1,13 @@
 #pragma once
 #include <string>
 
+class EnergyConsumer {
+public:
+    virtual ~EnergyConsumer() = default;
+
+    virtual double dailyEnergy() const = 0;
+};
+
 class InventoryItem {
 public:
     virtual ~InventoryItem() = default;
@@ -10,13 +17,8 @@ public:
     virtual std::string inventory_name() const = 0;
 
     virtual void describe(std::ostream &os) const = 0;
-};
 
-class EnergyConsumer {
-public:
-    virtual ~EnergyConsumer() = default;
-
-    virtual double dailyEnergy() const = 0;
+    virtual const EnergyConsumer* checker_energy() const { return nullptr; }
 };
 
 std::ostream &operator<<(std::ostream &os, const InventoryItem &item);

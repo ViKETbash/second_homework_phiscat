@@ -19,6 +19,8 @@ public:
     virtual void describe(std::ostream &os) const = 0;
 
     virtual const EnergyConsumer* checker_energy() const { return nullptr; }
+
+    virtual bool check_rook() const { return false; }
 };
 
 std::ostream &operator<<(std::ostream &os, const InventoryItem &item);

@@ -13,6 +13,8 @@ public:
         id_ = garb_id;
         name_ = garb_name;
         energy_ = garb_energy;
+        if (id_.empty()) throw BadCommand("empty id");
+        if (energy_ < 0) throw BadCommand("energy is < 0");
     }
 
     double dailyEnergy() const override { return energy_; }
@@ -30,6 +32,7 @@ public:
     Helmet(std::string garb_id, std::string garb_name) {
         id_ = garb_id;
         name_ = garb_name;
+        if (id_.empty()) throw BadCommand("empty id");
     }
 
     std::string inventory_id() const override { return id_; }

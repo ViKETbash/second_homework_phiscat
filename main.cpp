@@ -1,61 +1,160 @@
-#include <iostream>
+#include <algorithm>
 #include <iomanip>
+#include <iostream>
 #include <memory>
-#include <vector>
-#include "Transport.hpp"
-#include "Inventory.hpp"
-#include "Things.hpp"
+#include <sstream>
+#include <string>
+#include "Errors.hpp"
 #include "ServiceCenter.hpp"
-
-template<typename F>
-void attempt(F f) {
-    try { f(); } catch (const FleetError &e) { std::cout << "error: " << e.what() << '\n'; }
+#include "Things.hpp"
+#include "Transport.hpp"
+template <typename T>
+T Arg(std::stringstream &ss) {
+    T value;
+    if (!(ss >> value)) throw BadCommand("bad vvod");
+    return value;
+}
+void main_energy(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    std::cout << std::fixed << std::setprecision(1) << sc.totalEnergy() << '\n';
+}
+void main_add(ServiceCenter &sc, std::stringstream &ss) {
+    std::string kind = Arg<std::string>(ss);
+    if (kind == "scooter") {
+        std::string id = Arg<std::string>(ss);
+        std::string name = Arg<std::string>(ss);
+        double energy = Arg<double>(ss);
+        int score = Arg<int>(ss);
+        std::string garb;
+        if (ss >> garb) {
+            throw BadCommand("bad vvod");
+        }
+        sc.addTransport(std::make_unique<Scooter>(id, name, energy, score));
+    } else if (kind == "bike") {
+        std::string id = Arg<std::string>(ss);
+        std::string name = Arg<std::string>(ss);
+        int score = Arg<int>(ss);
+        std::string garb;
+        if (ss >> garb) {
+            throw BadCommand("bad vvod");
+        }
+        sc.addTransport(std::make_unique<Bike>(id, name, score));
+    } else if (kind == "ebike") {
+        std::string id =     Arg<std::string>(ss);
+        std::string name = Arg<std::string>(ss);
+        double energy = Arg<double>(ss);
+        int score = Arg<int>(ss);
+        std::string garb;
+        if (ss >> garb) {
+            throw BadCommand("bad vvod");
+        }
+        sc.addTransport(std::make_unique<ElectricBike>(id, name, energy, score));
+    } else if (kind == "helmet") {
+        std::string id = Arg<std::string>(ss);
+        std::string name = Arg<std::string>(ss);
+        std::string garb;
+        if (ss >> garb) {
+            throw BadCommand("bad vvod");
+        }
+        sc.addThing(std::make_unique<Helmet>(id, name));
+    } else if (kind == "dock") {
+        std::string id = Arg<std::string>(ss);
+        std::string name = Arg<std::string>(ss);
+        double energy = Arg<double>(ss);
+        std::string garb;
+        if (ss >> garb) {
+            throw BadCommand("bad vvod");
+        }
+        sc.addThing(std::make_unique<Dock_station>(id, name, energy));
+    } else {
+        throw BadCommand("badd vvod");
+    }
+}
+void main_list(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.printAll(std::cout);
 }
 
+void main_novice(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.printNovice(std::cout);
+}
+void main_top_energy(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.printMaxEnergy(std::cout);
+}
+void  main_show_focus(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.printfocus(std::cout);
+}
+void main_focus(ServiceCenter &sc, std::stringstream &ss) {
+    std::string id = Arg<std::string>(ss);
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.setfocus(id);
+}
+void main_remove(ServiceCenter &sc, std::stringstream &ss) {
+    std::string id = Arg<std::string>(ss);
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.remove(id);
+}
 
 int main() {
-    std::unique_ptr<InventoryItem> p = std::make_unique<Helmet>("nefr_europapa", "negr_afrika(mbappe)");
-    std::cout << *p << '\n';
-    Dock_station d("fanat_arsenala", "elis", 10.0);
-    Helmet h("fanat_chelsea", "ilusha");
-    std::cout << h << '\n';
-    std::cout << d << '\n';
-    std::cout << d.dailyEnergy() << '\n';
-    InventoryItem *garb_a = &d;
-    EnergyConsumer *garb_e = &d;
-    std::cout << garb_a->inventory_id() << ' ' << garb_e->dailyEnergy() << '\n';
-    std::vector<std::unique_ptr<InventoryItem> > v;
-    v.push_back(std::make_unique<Scooter>("S-1", "ModelX", 2.5, 8));
-    v.push_back(std::make_unique<Scooter>("S-3", "Slow", 1.5, 5));
-    v.push_back(std::make_unique<Bike>("B-1", "City", 4));
-    v.push_back(std::make_unique<ElectricBike>("E-1", "Volt", 0.5, 7));
-    v.push_back(std::make_unique<Dock_station>("D-1", "Hub", 10.0));
-    double total = 0;
-    for (const auto &p: v) {
-        std::cout << *p << '\n';
-        if (p->check_rook()) std::cout << "rookie\n";
-        if (const EnergyConsumer *c = p->checker_energy()) total += c->dailyEnergy();
-    }
-    std::cout << total << '\n';
-    std::cout << "-----------------------------------" << '\n';
+    std::stringstream ss;
+    std::string s;
     ServiceCenter sc;
-    attempt([&] { sc.addTransport(std::make_unique<Scooter>("Mancity", "blue", 2.5, 8)); });
-    attempt([&] { sc.addTransport(std::make_unique<Bike>("MU", "City", 4)); });
-    attempt([&] { sc.addTransport(std::make_unique<Scooter>("Chelsea", "BrokenX", 1.0, 9)); });
-    attempt([&] { sc.addThing(std::make_unique<Helmet>("barca-fu", "nePro")); });
-    attempt([&] { sc.addThing(std::make_unique<Dock_station>("tarkov", "Hub", 10.0)); });
-
-    //sc.printAll(std::cout);
-    sc.printNovice(std::cout);
-    std::cout << sc.totalEnergy() << '\n';
-    std::cout << "--------------------" << '\n';
-    Registry<int, 2> zhuenal;
-    zhuenal.add(1); zhuenal.add(2);
-    try { zhuenal.add(3); } catch (const FleetError& e) { std::cout << "error: " << e.what() << '\n'; }
-    std::cout << zhuenal;
-    Registry<std::string, 3> s;
-    s.add("a");
-    std::cout << s;
-    std::cout << "----------------------" << '\n';
-    sc.printMaxEnergy(std::cout);
+    while (true) {
+        ss.clear();
+        s.clear();
+        std::getline(std::cin, s);
+        s.erase(std::remove(s.begin(), s.end(), '\r'), s.end());
+        s.erase(std::remove(s.begin(), s.end(), '\n'), s.end());
+        ss << s;
+        if (!(ss >> s)) {
+            continue;
+        }
+        try {
+            if (s == "add") {
+                main_add(sc, ss);
+            } else if (s == "novice") {
+                main_novice(sc, ss);
+            } else if (s == "quit") {
+                exit(0);
+            } else if (s == "list") {
+                main_list(sc, ss);
+            } else if (s == "focus") {
+                main_focus(sc, ss);
+            } else if (s == "show_focus") {
+                main_show_focus(sc, ss);
+            } else if (s == "remove") {
+                main_remove(sc, ss);
+            } else if (s == "top_energy") {
+                main_top_energy(sc, ss);
+            } else if (s == "energy") {
+                main_energy(sc, ss);
+            }
+        } catch (const FleetError &garb) {
+            std::cout << "error: " << garb.what() << '\n';
+        }
+    }
 }

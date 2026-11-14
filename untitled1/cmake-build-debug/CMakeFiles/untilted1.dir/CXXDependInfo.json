@@ -1,0 +1,37 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "GNU",
+	"compiler-simulate-id" : "",
+	"config" : "Debug",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "C:/Users/mrpupik/CLionProjects/untitled1/cmake-build-debug",
+	"dir-cur-src" : "C:/Users/mrpupik/CLionProjects/untitled1",
+	"dir-top-bld" : "C:/Users/mrpupik/CLionProjects/untitled1/cmake-build-debug",
+	"dir-top-src" : "C:/Users/mrpupik/CLionProjects/untitled1",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : [],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "C:/Users/mrpupik/CLionProjects/untitled1/cmake-build-debug/CMakeFiles/untilted1.dir",
+	"sources" : 
+	{
+		"CMakeFiles/untilted1.dir/Inventory.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/mrpupik/CLionProjects/untitled1/Inventory.cpp"
+		},
+		"CMakeFiles/untilted1.dir/ServiceCenter.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/mrpupik/CLionProjects/untitled1/ServiceCenter.cpp"
+		},
+		"CMakeFiles/untilted1.dir/main.cpp.obj" : 
+		{
+			"language" : "CXX",
+			"source" : "C:/Users/mrpupik/CLionProjects/untitled1/main.cpp"
+		}
+	}
+}

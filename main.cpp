@@ -134,13 +134,13 @@ void main_remove(ServiceCenter &sc, std::stringstream &ss) {
 }
 
 int main() {
-    std::stringstream ss;
     std::string s;
     ServiceCenter sc;
     while (true) {
         std::getline(std::cin, s);
         s.erase(std::remove(s.begin(), s.end(), '\r'), s.end());
         s.erase(std::remove(s.begin(), s.end(), '\n'), s.end());
+        std::stringstream ss;
         ss << s;
         std::string garb;
         if (!(ss >> garb)) {

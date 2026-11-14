@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.3)
-project(phiscart)
+project(untitled1)
 
 set(CMAKE_CXX_STANDARD 20)
-add_executable(phiscart main.cpp Inventory.cpp)
+add_executable(untitled1 main.cpp Inventory.cpp ServiceCenter.cpp)

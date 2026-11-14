@@ -138,43 +138,42 @@ int main() {
     std::string s;
     ServiceCenter sc;
     while (true) {
-        ss.clear();
-        s.clear();
         std::getline(std::cin, s);
         s.erase(std::remove(s.begin(), s.end(), '\r'), s.end());
         s.erase(std::remove(s.begin(), s.end(), '\n'), s.end());
         ss << s;
-        if (!(ss >> s)) {
+        std::string garb;
+        if (!(ss >> garb)) {
             continue;
         }
         try {
-            if (s == "add") {
+            if (garb == "add") {
                 main_add(sc, ss);
-            } else if (s == "novice") {
+            } else if (garb == "novice") {
                 main_novice(sc, ss);
-            } else if (s == "quit") {
+            } else if (garb == "quit") {
                 break;
-            } else if (s == "list") {
+            } else if (garb == "list") {
                 main_list(sc, ss);
-            } else if (s == "focus") {
+            } else if (garb == "focus") {
                 main_focus(sc, ss);
-            } else if (s == "show_focus") {
+            } else if (garb == "show_focus") {
                 main_show_focus(sc, ss);
-            } else if (s == "remove") {
+            } else if (garb == "remove") {
                 main_remove(sc, ss);
-            } else if (s == "top_energy") {
+            } else if (garb == "top_energy") {
                 main_top_energy(sc, ss);
-            } else if (s == "energy") {
+            } else if (garb == "energy") {
                 main_energy(sc, ss);
-            } else if (s == "zhurnal") {
+            } else if (garb == "zhurnal") {
                 main_zhurnal(sc, ss);
-            } else if (s == "count") {
+            } else if (garb == "count") {
                 main_count(sc, ss);
             }else {
                 throw BadCommand("unknown command");
             }
-        } catch (const FleetError &garb) {
-            std::cout << "error: " << garb.what() << '\n';
+        } catch (const FleetError &garbq) {
+            std::cout << "error: " << garbq.what() << '\n';
         }
     }
 }

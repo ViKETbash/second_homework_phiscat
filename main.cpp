@@ -49,4 +49,13 @@ int main() {
     sc.printNovice(std::cout);
     std::cout << sc.totalEnergy() << '\n';
     std::cout << "--------------------" << '\n';
+    Registry<int, 2> zhuenal;
+    zhuenal.add(1); zhuenal.add(2);
+    try { zhuenal.add(3); } catch (const FleetError& e) { std::cout << "error: " << e.what() << '\n'; }
+    std::cout << zhuenal;
+    Registry<std::string, 3> s;
+    s.add("a");
+    std::cout << s;
+    std::cout << "----------------------" << '\n';
+    sc.printMaxEnergy(std::cout);
 }

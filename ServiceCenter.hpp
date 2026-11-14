@@ -4,8 +4,13 @@
 #include <vector>
 #include "Inventory.hpp"
 #include "Transport.hpp"
+#include "Registry.hpp"
 
 class ServiceCenter {
+    Registry<std::string, 67> zhurnal_;
+
+    void reg(const std::string &msg);
+
     std::vector<std::shared_ptr<InventoryItem> > fleet_;
 
     std::weak_ptr<InventoryItem> focus_;
@@ -27,11 +32,15 @@ public:
 
     void remove(const std::string &id);
 
+    void printMaxEnergy(std::ostream& os) const;
+
     std::size_t size() const { return fleet_.size(); }
 
     double totalEnergy() const;
 
     void printAll(std::ostream &os) const;
+
+    void printZhurnal(std::ostream& os) const;
 
     void printNovice(std::ostream &os) const;
 };

@@ -21,8 +21,8 @@ public:
     std::string inventory_id() const override { return id_; }
     std::string inventory_name() const override { return name_; }
     void describe(std::ostream &os) const override { os << id_ << ' ' << name_; }
-    bool check_rook() const override { return rookie_ >= 6; }
-    int rookies() const { return rookie_; }
+    bool check_rook () const override { return rookie_ >= 6; }
+    int rookie_num() const { return rookie_; }
 };
 
 class Bike : public Transport {

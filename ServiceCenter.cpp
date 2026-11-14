@@ -37,8 +37,14 @@ void ServiceCenter::inspect(const Transport &t) const {
 }
 
 void ServiceCenter::addTransport(std::unique_ptr<Transport> t) {
-    inspect(*t);
-    if (hasId(t->inventory_id())) throw BadCommand("duplicate id");
+    try {
+        inspect(*t);
+    } catch (const InspectionRejected &) {
+        reg("rejected " + (*t).inventory_id());
+        throw;
+    }
+    if (hasId((*t).inventory_id())) throw BadCommand("duplicate id");
+    reg("new_" + (*t).inventory_id());
     fleet_.push_back(std::move(t));
 }
 
@@ -50,7 +56,8 @@ void ServiceCenter::printfocus(std::ostream &os) const {
 }
 
 void ServiceCenter::addThing(std::unique_ptr<InventoryItem> item) {
-    if (hasId(item->inventory_id())) throw BadCommand("duplicate id");
+    if (hasId((*item).inventory_id())) throw BadCommand("duplicate id");
+    reg("new_" + (*item).inventory_id());
     fleet_.push_back(std::move(item));
 }
 
@@ -59,6 +66,7 @@ void ServiceCenter::remove(const std::string &id) {
                            [&](const std::shared_ptr<InventoryItem> &p) { return p->inventory_id() == id; });
     if (it == fleet_.end()) throw BadCommand("no such id");
     fleet_.erase(it);
+    reg("udalen_" + id);
 }
 
 double ServiceCenter::totalEnergy() const {
@@ -79,4 +87,33 @@ void ServiceCenter::printAll(std::ostream &os) const {
 void ServiceCenter::printNovice(std::ostream &os) const {
     for (const auto &p: fleet_)
         if (p->check_rook()) os << *p << '\n';
+}
+
+void ServiceCenter::reg(const std::string &msg) {
+    if (zhurnal_.check()) {
+        zhurnal_.add(msg);
+    }
+}
+
+void ServiceCenter::printZhurnal(std::ostream &os) const {
+    os << zhurnal_;
+}
+
+void ServiceCenter::printMaxEnergy(std::ostream &os) const {
+    std::vector<const InventoryItem *> all;
+    for (const auto &p: fleet_)
+        if (p->checker_energy()) all.push_back(p.get());
+    std::sort(all.begin(), all.end(),
+              [](const InventoryItem *a, const InventoryItem *b) {
+                  double ea = a->checker_energy()->dailyEnergy();
+                  double eb = b->checker_energy()->dailyEnergy();
+                  if (ea != eb) return ea > eb;
+                  return *a < *b;
+              });
+    Registry<const InventoryItem *, 3> top;
+    for (const InventoryItem *p: all) {
+        if (!top.check()) break;
+        top.add(p);
+    }
+    os << top;
 }

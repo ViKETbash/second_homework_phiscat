@@ -34,7 +34,6 @@ public:
         name_ = garb_name;
         if (id_.empty()) throw BadCommand("empty id");
     }
-
     std::string inventory_id() const override { return id_; }
     std::string inventory_name() const override { return name_; }
     void describe(std::ostream &os) const override { os << id_ << ' ' << name_; }

@@ -35,9 +35,11 @@ public:
 class ElectricBike : public Bike, public EnergyConsumer {
     double energy_;
 
+
 public:
     ElectricBike(std::string garb_id, std::string garb_name, double garb_energy, int garb_rookie)
         : Bike(std::move(garb_id), std::move(garb_name), garb_rookie), energy_(garb_energy) {
+        if (energy_ < 0) throw BadCommand("energy is < 0");
     }
 
     double dailyEnergy() const override { return energy_; }

@@ -14,6 +14,20 @@ T Arg(std::stringstream &ss) {
     if (!(ss >> value)) throw BadCommand("bad vvod");
     return value;
 }
+void main_zhurnal(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    sc.printZhurnal(std::cout);
+}
+void main_count(ServiceCenter &sc, std::stringstream &ss) {
+    std::string garb;
+    if (ss >> garb) {
+        throw BadCommand("bad vvod");
+    }
+    std::cout << sc.size() << '\n';
+}
 void main_energy(ServiceCenter &sc, std::stringstream &ss) {
     std::string garb;
     if (ss >> garb) {
@@ -139,7 +153,7 @@ int main() {
             } else if (s == "novice") {
                 main_novice(sc, ss);
             } else if (s == "quit") {
-                exit(0);
+                break;
             } else if (s == "list") {
                 main_list(sc, ss);
             } else if (s == "focus") {
@@ -152,6 +166,12 @@ int main() {
                 main_top_energy(sc, ss);
             } else if (s == "energy") {
                 main_energy(sc, ss);
+            } else if (s == "zhurnal") {
+                main_zhurnal(sc, ss);
+            } else if (s == "count") {
+                main_count(sc, ss);
+            }else {
+                throw BadCommand("unknown command");
             }
         } catch (const FleetError &garb) {
             std::cout << "error: " << garb.what() << '\n';
